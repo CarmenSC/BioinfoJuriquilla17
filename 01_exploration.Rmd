@@ -8,6 +8,7 @@ output:
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(cache=FALSE)
+#install.packages("knitr")
 ```
 
 ## Introduction
@@ -26,33 +27,53 @@ science.
 
 Let's start by installing the package that contains the data.
 
+(Esto es un anexo)Adding an example code: The code below is generating a samole of lnght 100 from a normal distrib with mean 0 and variance 1.
+```{r myNewCode}
+x<-rnorm(100,0,1)
+plot(x)
+```
+(AQUÍ termina el anexo)
 ```{r readRaw}
+#To install packages
+source("https://bioconductor.org/biocLite.R")
+#biocLite("devtools")
+#biocLite("PharmaPlotter")
+#biocLite("ggplot2")
+#biocLite("cowplot")
+#installed.packages()
+
 if( !require( PharmPlotter ) ){
   devtools:::install_github("areyesq89/PharmPlotter")
 }
-library(PharmPlotter)
+library(PharmPlotter) #Package de Alejandro para host data
 data("rawData", package="PharmPlotter")
 pharmacoData <- rawData
+pharmacoData
 ```
 
-What kind of variables are in the data? Are these variables numerical and/or categorical? What does each column represent?
+What kind of variables are in the data? Are these variables numerical and/or categorical? algunas son numéricas otras son strings. What does each column represent?
+
+
 
 ```{r quest2}
 head( pharmacoData )
-str( pharmacoData )
+str( pharmacoData ) #str structure of object
 ```
 
 How many drugs are contained in these data?
+15
 
 ```{r quest3}
 length( levels( pharmacoData$drug ) )
+
+
 ```
 
 How many drug concentrations were used in each study?
 
 ```{r quest4}
 tapply( pharmacoData$doseID, pharmacoData$study, function(x){
-        length( unique( x ) )
+        length( unique( x ) ) #aplica una operación/función a un subconjunto
     })
 ```
 
@@ -67,9 +88,12 @@ protocol?
 ```{r quest6, warning=FALSE}
 library(ggplot2)
 library(cowplot)
+#biocLite("cowplot") #biocLite(___) instala cosas de CRAN y bioconductor :)
+
 ggplot( pharmacoData, aes( log2(concentration) ) ) +
     geom_histogram(fill = "white", colour="black") +
     facet_wrap(~study)
+
 ```
 
 Viability scores are the percentage
@@ -90,6 +114,7 @@ between the two studies?
 ```{r}
 ggplot( pharmacoData, aes( viability, group=study, colour=study) ) +
     geom_density(fill="white", lwd=2, alpha=0.1) + xlim(0, 170)
+sessionInfo()
 ```
 
 The code below plots the viability scores as box-plots for each drug,

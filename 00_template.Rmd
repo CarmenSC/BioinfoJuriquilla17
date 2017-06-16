@@ -1,7 +1,7 @@
 ---
-title: "Insert your team name here"
-author: "Team members names"
-date: "Replicathon 2017"
+title: "which?"
+author: "CarmenSC"
+date: "June 2017"
 output:
   pdf_document: default
   html_document: default
@@ -30,20 +30,51 @@ You may find it helpful to use the version control and code sharing system calle
 ### Exploratory analysis of pharmacogenomic data
 
 1. How many cell-lines are contained in the data?
+288
+```{r}
+head(rawData)
+str( pharmacoData ) #str structure of object
+length(unique(rawData$cellLine))
 
+rawData
+
+```
 2. What drug concentrations were used in each study?
-
+```{r}
+print((unique(rawData$doseID)))
+print((unique(rawData$concentration)))
+#Son esos 38 valores de rawData$concentration
+```
 3. Histograms, appart from telling how is the data
 distributed, can also make evident potential
 problems with the data. Plot a histogram
 of drug viabilities. Does it look as one would
 expect from the description of the data?
+```{r}
+ggplot( rawData, aes( log2(rawData$viability) ) ) +
+    geom_histogram(fill = "white", colour="black") +
+    facet_wrap(~study) 
 
+ggplot( rawData, aes( (rawData$viability) ) ) +
+    geom_histogram(fill = "white", colour="black") +
+    facet_wrap(~study)
+```
 4. How many viability data points are within the
 expected range according to the definition of viability (e.g. above 0 
 and below 100)? Try to come up with explanations about
 the values that are out of range. Are these due to technical
 issues? Biology?
+```{r}
+range( rawData$viability )
+viability.more.than.zero<-print ( rawData$viability > 0 )
+length(viability.more.than.zero)
+
+viability.less.than.zero<-print ( rawData$viability < 100 )
+length(viability.more.than.zero)
+
+sum(length(viability.more.than.zero),length(viability.more.than.zero))
+
+```
 
 5. Read the csv file containing the summarized data files. What kind
 of variables are in the data? What does each column represents?
