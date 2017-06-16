@@ -65,23 +65,37 @@ and below 100)? Try to come up with explanations about
 the values that are out of range. Are these due to technical
 issues? Biology?
 ```{r}
+
 range( rawData$viability )
-viability.more.than.zero<-print ( rawData$viability > 0 )
-length(viability.more.than.zero)
 
-viability.less.than.zero<-print ( rawData$viability < 100 )
-length(viability.more.than.zero)
 
-sum(length(viability.more.than.zero),length(viability.more.than.zero))
+sum( rawData$viability > 0 )
+sum( rawData$viability < 100 )
+
+
+sum(sum( rawData$viability > 0 ),sum( rawData$viability < 100 ))
+
+
+
 
 ```
 
 5. Read the csv file containing the summarized data files. What kind
 of variables are in the data? What does each column represents?
+```{r}
+print(summarizedData)
+str(summarizedData)
+```
 
 6. Plot a histogram of the viability scores separating the different drug
 doses. Are stronger drug concentrations consistent with lower viability scores?
+```{r}
+ggplot( pharmacoData, aes( log2(viability) ) ) +
+    geom_histogram(fill = "white", colour="black") +
+    facet_wrap(~study)
 
+ls()
+```
 ### Using Correlation Measures to Assess Replicability of Drug Response Studies
 
 1. Create a scatterplot for each drug comparing the AUC in GDSC and CCLE for all cell lines (hint: code from Tutorial 2 may help).
